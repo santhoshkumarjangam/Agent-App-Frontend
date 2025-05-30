@@ -1,0 +1,113 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #D1D0D0;
+  margin: 0;
+  padding: 0;
+  color: #000000;
+}
+
+a.back-btn {
+  display: inline-block;
+  margin: 20px 40px;
+  padding: 10px 16px;
+  background-color: #5C4E4E;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+a.back-btn:hover {
+  background-color: #988686;
+}
+
+.container {
+  display: flex;
+  justify-content: flex-start;
+  padding: 20px 40px 60px 40px;
+}
+
+.form-card {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #988686;
+}
+
+.form-card h2 {
+  margin-bottom: 30px;
+  font-size: 1.8em;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #000000;
+  font-weight: 500;
+}
+
+input[type="text"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #988686;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #5C4E4E;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button.submit-btn {
+  background-color: #5C4E4E;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+button.submit-btn:hover {
+  background-color: #988686;
+}
+
+/* Optional: Responsive */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  .form-card {
+    padding: 24px;
+  }
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Multi-Agent</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='../static/createMultiAgent.css') }}" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <a href="{{ url_for('home') }}" class="back-btn">Back to Dashboard</a>
+  <div class="container">
+    <div class="form-card">
+      <h2><i class="fas fa-user-gear"></i>Create New Agent</h2>
+      <form action="" method="POST" id="mainAgentForm">
+
+        <!-- Main Agent Fields -->
+        <div class="form-group">
+          <label for="name">Agent Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+ 
+        <div class="form-group">
+          <label for="model">Model</label>
+          <select id="model" name="model" required>
+            <option value="">-- Select Model --</option>
+            <option value="gemini-2.0-flash-001">gemini-2.0-flash-001</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="instructions">Instructions</label>
+          <textarea id="instructions" name="instructions" rows="3" required></textarea>
+        </div>
+
+        <!-- Sub-Agent Container -->
+        <div id="subAgentContainer"></div>
+
+        <!-- Add Sub-Agent Button -->
+        <button type="button" class="add-subagent-btn" onclick="addSubAgent()">
+          <i class="fas fa-user-plus"></i>Add Sub-Agent
+        </button>
+
+        <br>
+
+        <!-- Submit -->
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-plus-circle"></i>Create Agent
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let subAgentCounter = 0;
+    const freeIndices = [];
+
+    function getNextIndex() {
+      return freeIndices.length > 0 ? freeIndices.shift() : ++subAgentCounter;
+    }
+
+    function addSubAgent() {
+      const index = getNextIndex();
+      const container = document.getElementById("subAgentContainer");
+
+      const subForm = document.createElement("div");
+      subForm.classList.add("sub-agent-form");
+      subForm.setAttribute("data-index", index);
+      subForm.innerHTML = `
+        <hr />
+        <h3>Sub-Agent ${index}</h3>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" name="sub_name[]" required />
+        </div>
+
+        <div class="form-group">
+          <label>Model</label>
+          <select name="sub_model[]" required>
+            <option value="">-- Select Model --</option>
+            <option value="gemini-2.0-flash-001">gemini-2.0-flash-001</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="sub_description[]" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Instructions</label>
+          <textarea name="sub_instructions[]" rows="3" required></textarea>
+        </div>
+
+        <button type="button" class="remove-btn" onclick="removeSubAgent(this, ${index})">Remove Sub-Agent</button>
+      `;
+      container.appendChild(subForm);
+    }
+
+    function removeSubAgent(button, index) {
+      const form = button.closest('.sub-agent-form');
+      form.remove();
+      freeIndices.push(index); // Reuse this index when next one is created
+      freeIndices.sort((a, b) => a - b); // Keep the list in order
+    }
+  </script>
+</body>
+</html>

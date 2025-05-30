@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Agent Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='../static/index.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+  <body>
+
+    <header class="dashboard-title">
+      <center><h1 style="color: black;">Agent Dashboard</h1></center>
+    </header>
+
+    <br><br>
+
+    <div class="action-bar-1">
+      <div class="dropdown-1">
+        <input type="checkbox" id="dropdownToggle" class="dropdown-toggle" />
+        <label for="dropdownToggle" class="create-btn-1">Create Agent ▼</label>
+        <div class="dropdown-content-1">
+          <a href="{{ url_for('create_single_agent') }}">Single Agent</a>
+          <a href="{{ url_for('create_multi_agent') }}">Multi-Agent</a>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <h2 class="section-title">Your Agents</h2>
+
+    <div class="agents-container">
+          {% for agent in agents %}
+            <div class="agent-card">
+              <h3 class="agent-name">{{ agent.name }}</h3>
+              <a href="{{ url_for('chat', agent_id=agent.id) }}" class="use-btn" style="margin-left: 70px;">USE IT</a>
+            </div>
+          {% endfor %}
+    </div>
+
+  </body>
+</html>  
+
+
