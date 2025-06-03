@@ -11,10 +11,10 @@
       <header><center><h1 style="color: black;">Chat</h1></center></header>
 
       <div class="chat-window" id="chat-window">
-        {{response}}
+        {{ response.strip() }}
       </div>
 
-      <form action="{{ url_for('chat', agent_id=agent_id) }}" class="chat-form" method="POST">
+      <form action="{{ url_for('chat', agent_type=agent_type, agent_id=agent_id) }}" class="chat-form" method="POST">
         <input name="prompt" type="text" placeholder="Type your message..." required>
         <button type="submit">Send</button>
       </form>

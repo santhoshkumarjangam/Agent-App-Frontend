@@ -1,6 +1,6 @@
 class SingleAgent:
     def __init__(self, name, model, description, instruction):
-        self.name = "_".join(name.split())
+        self.name = "_".join(name.title().split())
         self.model = model
         self.description = description
         self.instruction = instruction
@@ -17,7 +17,7 @@ class SingleAgent:
     
 class MultiAgent:
     def __init__(self, name, model, description, instruction, subagents=[]):
-        self.name = "_".join(name.split())
+        self.name = "_".join(name.title().split())
         self.model = model
         self.description = description
         self.instruction = instruction
@@ -33,5 +33,3 @@ class MultiAgent:
             sub_agents = self.subagents
         )
         return agent
-
-    

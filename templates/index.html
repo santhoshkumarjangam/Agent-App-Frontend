@@ -28,15 +28,26 @@
     </div>
 
     <br>
-    <h2 class="section-title">Your Agents</h2>
-
+    <h2 class="section-title">Single Agents</h2>
     <div class="agents-container">
-          {% for agent in agents %}
+          {% for agent in single_agents %}
             <div class="agent-card">
               <h3 class="agent-name">{{ agent.name }}</h3>
-              <a href="{{ url_for('chat', agent_id=agent.id) }}" class="use-btn" style="margin-left: 70px;">USE IT</a>
+              <a href="{{ url_for('chat', agent_type='single', agent_id=agent.id) }}" class="use-btn" style="margin-left: 70px;">USE IT</a>
             </div>
           {% endfor %}
+    </div>
+
+    <br>
+
+    <h2 class="section-title">Multi Agents</h2>
+    <div class="agents-container">
+      {% for agent in multi_agents %}
+        <div class="agent-card">
+          <h3 class="agent-name">{{ agent.name }}</h3>
+          <a href="{{ url_for('chat', agent_type='multi', agent_id=agent.id) }}" class="use-btn" style="margin-left: 70px;">USE IT</a>
+        </div>
+      {% endfor %}
     </div>
 
   </body>
