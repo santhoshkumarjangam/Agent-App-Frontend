@@ -7,7 +7,6 @@ from google.adk.agents import Agent
 from google.adk.sessions import DatabaseSessionService
 from google.adk.runners import Runner
 from google.genai.types import Content, Part
-from agent_templates import SingleAgent, MultiAgent
 
 load_dotenv()
 
@@ -21,13 +20,6 @@ class AgentRequestBody(BaseModel):
 
 @app.post("/interact/single/{agent_id}")
 async def interact_single(body: AgentRequestBody, agent_id: int):
-    # with sqlite3.connect("database.db") as connection:
-    #     cursor = connection.cursor()
-    #     cursor.execute("SELECT agent_instance FROM single_agents WHERE agent_id = ?", (agent_id,))
-    #     row = cursor.fetchone()
-
-    # agent = pickle.loads(row[0])
-
     with sqlite3.connect("database.db") as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT agent_name, model, description, instruction, tools FROM single_agents WHERE agent_id = ?", (agent_id,))
@@ -47,7 +39,6 @@ async def interact_single(body: AgentRequestBody, agent_id: int):
         description = description,
         instruction= instruction,
         tools=[MCPToolset(connection_params=SseServerParams(url="http://127.0.0.1:8000/sse"), tool_filter=tools)]
-        #need to add MCPToolset client and connect it to mcp server and filter out the tools the user selected
     )
 
     runner = Runner(app_name="MyApp", agent=agent, session_service=session_service)
@@ -96,15 +87,6 @@ class CreateSingleAgentRequestBody(BaseModel):
 
 @app.post("/create-single-agent")
 def create_single_agent(body: CreateSingleAgentRequestBody):
-
-    # single_agent = SingleAgent(body.name, body.model, body.description, body.instruction, tools=body.tools)
-    # agent = single_agent.create_ADK_agent()
-
-    # serialized = pickle.dumps(agent)
-
-
-    # add column to store tools (to later display onto the home page)
-    # convert body.tools into json and store into db
     import json
     tools_json = json.dumps([tool for tool in body.tools])
 
