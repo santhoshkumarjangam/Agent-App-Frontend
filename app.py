@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     response = requests.get(
-            url="http://127.0.0.1:8000/get-agents"
+            url="http://127.0.0.1:8080/get-agents"
         )
     data = response.json()
     single_agents = data.get("single_agents", [])
@@ -19,11 +19,12 @@ def home():
 def create_single_agent():
     if request.method == "POST":
         response = requests.post(
-            url="http://127.0.0.1:8000/create-single-agent",
+            url="http://127.0.0.1:8080/create-single-agent",
             json={"name": request.form.get("name"),
                   "model": request.form.get("model"),
                   "description": request.form.get("description"),
-                  "instruction": request.form.get("instruction")
+                  "instruction": request.form.get("instruction"),
+                  "tools": request.form.getlist("tools")
                 }
         )
         return redirect(url_for('home'))
@@ -63,7 +64,7 @@ def create_multi_agent():
         }
 
         response = requests.post(
-            url="http://127.0.0.1:8000/create-multi-agent",
+            url="http://127.0.0.1:8080/create-multi-agent",
             json=payload
         )
         return redirect(url_for('home'))
@@ -76,7 +77,7 @@ def chat(agent_id, agent_type):
         prompt = request.form.get("prompt")
         
         response = requests.post(
-            url = f"http://127.0.0.1:8000/interact/{agent_type}/{agent_id}",
+            url = f"http://127.0.0.1:8080/interact/{agent_type}/{agent_id}",
             json={"user_id":"new-user","message":str(prompt)}
         )
 

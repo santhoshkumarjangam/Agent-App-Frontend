@@ -111,3 +111,41 @@ button.submit-btn:hover {
     padding: 24px;
   }
 }
+
+.tool-group {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background-color: #F3F3F3;
+  border-left: 4px solid #5C4E4E;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tool-group-label {
+  font-weight: 600;
+  color: #5C4E4E;
+  margin-bottom: 12px;
+  font-size: 1.05em;
+}
+
+.tool-checkbox {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  gap: 6px;
+}
+
+.tool-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #5C4E4E;
+  cursor: pointer;
+}
+
+.tool-checkbox label {
+  font-weight: 500;
+  font-size: 0.95em;
+  cursor: pointer;
+  color: #333;
+}

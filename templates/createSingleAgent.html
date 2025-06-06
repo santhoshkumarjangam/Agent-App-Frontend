@@ -38,6 +38,84 @@
             <textarea id="instructions" name="instruction" rows="3" required></textarea>
           </div>
 
+          <div class="form-group">
+            <label>Tools</label>
+
+            <div class="tool-group">
+              <div class="tool-group-label">To-Do</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="tools" value="list_db_tables">
+                <label for="tool-todo">list_db_tables</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="tools" value="get_table_schema">
+                <label for="tool-todo">get_table_schema</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="tools" value="query_db_table">
+                <label for="tool-todo">query_db_table</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="tools" value="insert_data">
+                <label for="tool-todo">insert_data</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="tools" value="delete_data">
+                <label for="tool-todo">delete_data</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">Notepad</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-notes" name="tools" value="add_note">
+                <label for="tool-notes">add_note</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-notes" name="tools" value="read_notes">
+                <label for="tool-notes">read_notes</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">Directory Traversal</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-directory-traverse" name="tools" value="get_largest_file">
+                <label for="tool-directory-traverse">get_largest_file</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-directory-traverse" name="tools" value="get_total_size">
+                <label for="tool-directory-traverse">get_total_size</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">PDF Pages</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-pdf-page" name="tools" value="extract_page_text">
+                <label for="tool-pdf-page">extract_page_text</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-pdf-page" name="tools" value="extract_page_range_text">
+                <label for="tool-pdf-page">extract_page_range_text</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">File Rename</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-rename-file" name="tools" value="rename_file">
+                <label for="tool-rename-file">rename_file</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-rename-file" name="tools" value="rename_files_with_prefix_to_name">
+                <label for="tool-rename-file">rename_files_with_prefix_to_name</label>
+              </div>
+            </div>
+
+            <small>Select one or more tools.</small>
+          </div>
+
           <button type="submit" class="submit-btn"><i class="fas fa-plus-circle"></i>Create Agent</button>
 
         </form>

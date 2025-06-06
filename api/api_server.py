@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-import sqlite3, pickle
+import sqlite3, pickle, json
 from dotenv import load_dotenv
 from google.adk.agents import Agent
 from google.adk.sessions import DatabaseSessionService
@@ -21,12 +21,35 @@ class AgentRequestBody(BaseModel):
 
 @app.post("/interact/single/{agent_id}")
 async def interact_single(body: AgentRequestBody, agent_id: int):
+    # with sqlite3.connect("database.db") as connection:
+    #     cursor = connection.cursor()
+    #     cursor.execute("SELECT agent_instance FROM single_agents WHERE agent_id = ?", (agent_id,))
+    #     row = cursor.fetchone()
+
+    # agent = pickle.loads(row[0])
+
     with sqlite3.connect("database.db") as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT agent_instance FROM single_agents WHERE agent_id = ?", (agent_id,))
+        cursor.execute("SELECT agent_name, model, description, instruction, tools FROM single_agents WHERE agent_id = ?", (agent_id,))
         row = cursor.fetchone()
 
-    agent = pickle.loads(row[0])
+    name = row[0]
+    model = row[1]
+    description = row[2]
+    instruction = row[3]
+    tools = json.loads(row[4])
+
+    from google.adk.agents import Agent
+    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseServerParams
+    agent = Agent(
+        name = "_".join(name.title().split()),
+        model = model,
+        description = description,
+        instruction= instruction,
+        tools=[MCPToolset(connection_params=SseServerParams(url="http://127.0.0.1:8000/sse"), tool_filter=tools)]
+        #need to add MCPToolset client and connect it to mcp server and filter out the tools the user selected
+    )
+
     runner = Runner(app_name="MyApp", agent=agent, session_service=session_service)
     session = await session_service.create_session(app_name="MyApp", user_id=body.user_id)
 
@@ -69,20 +92,27 @@ class CreateSingleAgentRequestBody(BaseModel):
     model : str
     description : str
     instruction : str
+    tools : list[str]
 
 @app.post("/create-single-agent")
 def create_single_agent(body: CreateSingleAgentRequestBody):
 
-    single_agent = SingleAgent(body.name, body.model, body.description, body.instruction)
-    agent = single_agent.create_ADK_agent()
+    # single_agent = SingleAgent(body.name, body.model, body.description, body.instruction, tools=body.tools)
+    # agent = single_agent.create_ADK_agent()
 
-    serialized = pickle.dumps(agent)
+    # serialized = pickle.dumps(agent)
+
+
+    # add column to store tools (to later display onto the home page)
+    # convert body.tools into json and store into db
+    import json
+    tools_json = json.dumps([tool for tool in body.tools])
 
     with sqlite3.connect('database.db') as connection:
         cursor = connection.cursor()
         cursor.execute("""
-        INSERT INTO single_agents (agent_name, model, description, instruction, agent_instance) VALUES (?, ?, ?, ?, ?);
-        """,(single_agent.name, single_agent.model,  single_agent.description, single_agent.instruction, serialized))
+        INSERT INTO single_agents (agent_name, model, description, instruction, tools) VALUES (?, ?, ?, ?, ?);
+        """,(body.name, body.model,  body.description, body.instruction, tools_json))
         connection.commit()
 
     return {"STATUS":"Success"}
@@ -160,4 +190,4 @@ def get_agents():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app=app)
+    uvicorn.run(app=app, port=8080)
