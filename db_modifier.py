@@ -1,27 +1,28 @@
 import sqlite3
 
-with sqlite3.connect('./api/database.db') as conn:
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM single_agents;")
-    cursor.execute("ALTER TABLE single_agents ADD COLUMN tools TEXT;")
-
 # with sqlite3.connect('./api/database.db') as conn:
 #     cursor = conn.cursor()
+#     cursor.execute("DELETE FROM single_agents;")
+#     cursor.execute("ALTER TABLE single_agents ADD COLUMN tools TEXT;")
 
-#     cursor.execute("DELETE FROM multi_agents")
+with sqlite3.connect('./api/database.db') as conn:
+    cursor = conn.cursor()
 
-#     cursor.execute("""
-#     CREATE TABLE IF NOT EXISTS multi_agents (
-#         agent_id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         agent_name TEXT NOT NULL,
-#         model TEXT,
-#         description TEXT,
-#         instruction TEXT,
-#         sub_agents TEXT,
-#         agent_instance BLOB
-#     );
-#     """)
-#     conn.commit()
+    cursor.execute("DELETE FROM multi_agents")
+
+    # cursor.execute("""
+    # CREATE TABLE IF NOT EXISTS multi_agents (
+    #     agent_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    #     agent_name TEXT NOT NULL,
+    #     model TEXT,
+    #     description TEXT,
+    #     instruction TEXT,
+    #     sub_agents TEXT,
+    #     tools TEXT,
+    #     agent_instance BLOB
+    # );
+    # """)
+    # conn.commit()
 
 # with sqlite3.connect("todo.db") as conn:
 #     cur = conn.cursor()

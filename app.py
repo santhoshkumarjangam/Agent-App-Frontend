@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request
-
+import json
 import requests
 
 app = Flask(__name__)
@@ -39,6 +39,7 @@ def create_multi_agent():
             "model": request.form.get("model"),
             "description": request.form.get("description"),
             "instruction": request.form.get("instruction"),
+            "tools": request.form.getlist("main_tools")
         }
 
         sub_names = request.form.getlist("sub_name[]")
@@ -48,11 +49,13 @@ def create_multi_agent():
 
         sub_agents = []
         for i in range(len(sub_names)):
+            tools = request.form.getlist(f"sub_tools[{i}][]")
             sub_agents.append({
                 "name": sub_names[i],
                 "model": sub_models[i],
                 "description": sub_descriptions[i],
                 "instruction": sub_instructions[i],
+                "tools": tools
             })
 
         payload = {
@@ -60,8 +63,11 @@ def create_multi_agent():
             "model": main_agent_data["model"],
             "description": main_agent_data["description"],
             "instruction": main_agent_data["instruction"],
+            "tools": main_agent_data["tools"],
             "subagents": sub_agents
         }
+
+        print(payload)
 
         response = requests.post(
             url="http://127.0.0.1:8080/create-multi-agent",

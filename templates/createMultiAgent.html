@@ -38,6 +38,84 @@
           <textarea id="instruction" name="instruction" rows="3" required></textarea>
         </div>
 
+        <div class="form-group">
+            <label>Tools</label>
+
+            <div class="tool-group">
+              <div class="tool-group-label">To-Do</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="main_tools" value="list_db_tables">
+                <label for="tool-todo">list_db_tables</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="main_tools" value="get_table_schema">
+                <label for="tool-todo">get_table_schema</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="main_tools" value="query_db_table">
+                <label for="tool-todo">query_db_table</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="main_tools" value="insert_data">
+                <label for="tool-todo">insert_data</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="main_tools" value="delete_data">
+                <label for="tool-todo">delete_data</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">Notepad</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-notes" name="main_tools" value="add_note">
+                <label for="tool-notes">add_note</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-notes" name="main_tools" value="read_notes">
+                <label for="tool-notes">read_notes</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">Directory Traversal</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-directory-traverse" name="main_tools" value="get_largest_file">
+                <label for="tool-directory-traverse">get_largest_file</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-directory-traverse" name="main_tools" value="get_total_size">
+                <label for="tool-directory-traverse">get_total_size</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">PDF Pages</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-pdf-page" name="main_tools" value="extract_page_text">
+                <label for="tool-pdf-page">extract_page_text</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-pdf-page" name="main_tools" value="extract_page_range_text">
+                <label for="tool-pdf-page">extract_page_range_text</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">File Rename</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-rename-file" name="main_tools" value="rename_file">
+                <label for="tool-rename-file">rename_file</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-rename-file" name="main_tools" value="rename_files_with_prefix_to_name">
+                <label for="tool-rename-file">rename_files_with_prefix_to_name</label>
+              </div>
+            </div>
+
+            <small>Select one or more tools.</small>
+          </div>
+
         <!-- Sub-Agent Container -->
         <div id="subAgentContainer"></div>
 
@@ -61,7 +139,7 @@
     const freeIndices = [];
 
     function getNextIndex() {
-      return freeIndices.length > 0 ? freeIndices.shift() : ++subAgentCounter;
+      return freeIndices.length > 0 ? freeIndices.shift() : subAgentCounter++;
     }
 
     function addSubAgent() {
@@ -73,7 +151,7 @@
       subForm.setAttribute("data-index", index);
       subForm.innerHTML = `
         <hr />
-        <h3>Sub-Agent ${index}</h3>
+        <h3>Sub-Agent ${index+1}</h3>
         <div class="form-group">
           <label>Name</label>
           <input type="text" name="sub_name[]" required />
@@ -96,6 +174,84 @@
           <label>Instructions</label>
           <textarea name="sub_instructions[]" rows="3" required></textarea>
         </div>
+
+        <div class="form-group">
+            <label>Tools</label>
+
+            <div class="tool-group">
+              <div class="tool-group-label">To-Do</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="list_db_tables">
+                <label for="tool-todo">list_db_tables</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="get_table_schema">
+                <label for="tool-todo">get_table_schema</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="query_db_table">
+                <label for="tool-todo">query_db_table</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="insert_data">
+                <label for="tool-todo">insert_data</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="delete_data">
+                <label for="tool-todo">delete_data</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">Notepad</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-notes" name="sub_tools[${index}][]" value="add_note">
+                <label for="tool-notes">add_note</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-notes" name="sub_tools[${index}][]" value="read_notes">
+                <label for="tool-notes">read_notes</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">Directory Traversal</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-directory-traverse" name="sub_tools[${index}][]" value="get_largest_file">
+                <label for="tool-directory-traverse">get_largest_file</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-directory-traverse" name="sub_tools[${index}][]" value="get_total_size">
+                <label for="tool-directory-traverse">get_total_size</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">PDF Pages</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-pdf-page" name="sub_tools[${index}][]" value="extract_page_text">
+                <label for="tool-pdf-page">extract_page_text</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-pdf-page" name="sub_tools[${index}][]" value="extract_page_range_text">
+                <label for="tool-pdf-page">extract_page_range_text</label>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <div class="tool-group-label">File Rename</div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-rename-file" name="sub_tools[${index}][]" value="rename_file">
+                <label for="tool-rename-file">rename_file</label>
+              </div>
+              <div class="tool-checkbox">
+                <input type="checkbox" id="tool-rename-file" name="sub_tools[${index}][]" value="rename_files_with_prefix_to_name">
+                <label for="tool-rename-file">rename_files_with_prefix_to_name</label>
+              </div>
+            </div>
+
+            <small>Select one or more tools.</small>
+          </div>
 
         <button type="button" class="remove-btn" onclick="removeSubAgent(this, ${index})">Remove Sub-Agent</button>
       `;
