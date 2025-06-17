@@ -1,125 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="{{ url_for('static', filename='../static/createSingleAgent.css') }}">
-      <title>Document</title>
-  </head>
-  <body>
-    <a href="{{ url_for('home') }}" class="back-btn">Back to Dashboard</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Single Agent</title>
+    
+    <!-- Google Fonts (from dashboard) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Your New Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='createSingleAgent.css') }}">
+</head>
+<body>
 
-    <div class="container">
-      <div class="form-card">
-        <h2><i class="fas fa-user-gear"></i>Create Single Agent</h2>
+    <div class="page-container">
+        <header class="page-header">
+            <a href="{{ url_for('home') }}" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </a>
+        </header>
 
-        <form action="{{ url_for('create_single_agent') }}" method="POST">
+        <div class="form-card">
+            <h2 class="form-title">
+                Create Single Agent
+            </h2>
 
-          <div class="form-group">
-            <label for="name">Agent Name</label>
-            <input type="text" id="name" name="name" required>
-          </div>
- 
-          <div class="form-group">
-            <label for="model">Model</label>
-            <select id="model" name="model" required>
-              <option value="">-- Select Model --</option>
-              <option value="gemini-2.0-flash-001">gemini-2.0-flash-001</option>
-            </select>
-          </div>
+            <form action="{{ url_for('create_single_agent') }}" method="POST">
+                
+                <div class="form-grid">
+                    <!-- Agent Name -->
+                    <div class="form-group span-2">
+                        <label for="name">Agent Name</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="e.g., Database Manager" required>
+                    </div>
 
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" name="description" rows="3" required></textarea>
-          </div>
+                    <!-- Model Selection -->
+                    <div class="form-group span-2">
+                        <label for="model">Model</label>
+                        <select id="model" name="model" class="form-input" required>
+                            <option value="" disabled selected>-- Select a Model --</option>
+                            <option value="gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+                            <!-- Add other models here -->
+                        </select>
+                    </div>
 
-          <div class="form-group">
-            <label for="instructions">Instruction</label>
-            <textarea id="instructions" name="instruction" rows="3" required></textarea>
-          </div>
+                    <!-- Description -->
+                    <div class="form-group span-2">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3" class="form-input" placeholder="A short, one-line summary of the agent's purpose." required></textarea>
+                    </div>
 
-          <div class="form-group">
-            <label>Tools</label>
+                    <!-- Instructions -->
+                    <div class="form-group span-2">
+                        <label for="instructions">Instructions</label>
+                        <textarea id="instructions" name="instruction" rows="5" class="form-input" placeholder="Detailed instructions for the agent. Be specific about its role, personality, and limitations." required></textarea>
+                    </div>
+                </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">To-Do</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="tools" value="list_db_tables">
-                <label for="tool-todo">list_db_tables</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="tools" value="get_table_schema">
-                <label for="tool-todo">get_table_schema</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="tools" value="query_db_table">
-                <label for="tool-todo">query_db_table</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="tools" value="insert_data">
-                <label for="tool-todo">insert_data</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="tools" value="delete_data">
-                <label for="tool-todo">delete_data</label>
-              </div>
-            </div>
+                <!-- Tools Section -->
+                <div class="form-group">
+                    <label>Tools</label>
+                    <small class="label-description">Select the tools this agent is authorized to use.</small>
+                    
+                    <div class="tool-section">
+                        <div class="tool-group">
+                            <div class="tool-group-label">Database Tools</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-list-db" name="tools" value="list_db_tables"><label for="tool-list-db">list_db_tables</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-get-schema" name="tools" value="get_table_schema"><label for="tool-get-schema">get_table_schema</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-query-db" name="tools" value="query_db_table"><label for="tool-query-db">query_db_table</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-insert-data" name="tools" value="insert_data"><label for="tool-insert-data">insert_data</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-delete-data" name="tools" value="delete_data"><label for="tool-delete-data">delete_data</label></div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-group">
+                            <div class="tool-group-label">Notepad</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-add-note" name="tools" value="add_note"><label for="tool-add-note">add_note</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-read-notes" name="tools" value="read_notes"><label for="tool-read-notes">read_notes</label></div>
+                            </div>
+                        </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">Notepad</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-notes" name="tools" value="add_note">
-                <label for="tool-notes">add_note</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-notes" name="tools" value="read_notes">
-                <label for="tool-notes">read_notes</label>
-              </div>
-            </div>
+                        <div class="tool-group">
+                            <div class="tool-group-label">File System</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-get-largest" name="tools" value="get_largest_file"><label for="tool-get-largest">get_largest_file</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-get-size" name="tools" value="get_total_size"><label for="tool-get-size">get_total_size</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-rename-file" name="tools" value="rename_file"><label for="tool-rename-file">rename_file</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-rename-prefix" name="tools" value="rename_files_with_prefix_to_name"><label for="tool-rename-prefix">rename_files_with_prefix</label></div>
+                            </div>
+                        </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">Directory Traversal</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-directory-traverse" name="tools" value="get_largest_file">
-                <label for="tool-directory-traverse">get_largest_file</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-directory-traverse" name="tools" value="get_total_size">
-                <label for="tool-directory-traverse">get_total_size</label>
-              </div>
-            </div>
+                        <div class="tool-group">
+                            <div class="tool-group-label">PDF Tools</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-extract-page" name="tools" value="extract_page_text"><label for="tool-extract-page">extract_page_text</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-extract-range" name="tools" value="extract_page_range_text"><label for="tool-extract-range">extract_page_range_text</label></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">PDF Pages</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-pdf-page" name="tools" value="extract_page_text">
-                <label for="tool-pdf-page">extract_page_text</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-pdf-page" name="tools" value="extract_page_range_text">
-                <label for="tool-pdf-page">extract_page_range_text</label>
-              </div>
-            </div>
-
-            <div class="tool-group">
-              <div class="tool-group-label">File Rename</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-rename-file" name="tools" value="rename_file">
-                <label for="tool-rename-file">rename_file</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-rename-file" name="tools" value="rename_files_with_prefix_to_name">
-                <label for="tool-rename-file">rename_files_with_prefix_to_name</label>
-              </div>
-            </div>
-
-            <small>Select one or more tools.</small>
-          </div>
-
-          <button type="submit" class="submit-btn"><i class="fas fa-plus-circle"></i>Create Agent</button>
-
-        </form>
-      </div>
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-circle-plus"></i>Create Agent
+                </button>
+            </form>
+        </div>
     </div>
-  </body>
+</body>
 </html>

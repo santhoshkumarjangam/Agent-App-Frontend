@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-import sqlite3, pickle, json
+import sqlite3, json
 from dotenv import load_dotenv
-from google.adk.agents import Agent
 from google.adk.sessions import DatabaseSessionService
 from google.adk.runners import Runner
 from google.genai.types import Content, Part
@@ -105,7 +104,6 @@ async def interact(body: AgentRequestBody, agent_type: str, agent_id: int):
 
         return JSONResponse(content={"response": response_text})
     
-
 # @app.post("/interact/single/{agent_id}")
 # async def interact_single(body: AgentRequestBody, agent_id: int):
 #     with sqlite3.connect("database.db") as connection:
@@ -185,8 +183,6 @@ def create_single_agent(body: CreateSingleAgentRequestBody):
         """,(body.name, body.model,  body.description, body.instruction, tools_json))
         connection.commit()
 
-    return {"STATUS":"Success"}
-
 class SubAgent(BaseModel):
     name: str
     model: str
@@ -217,44 +213,7 @@ def create_multi_agent(body: CreateMultiAgentRequestBody):
         """,(body.name, body.model,  body.description, body.instruction, subagents_json, tools_json))
         connection.commit()
 
-    return {"STATUS":"Success"}
-
-    subagents = []
-    for sub in body.subagents:
-        subagents.append(
-            Agent(
-                name="_".join(sub.name.title().split()),
-                model=sub.model,
-                description=sub.description,
-                instruction=sub.instruction
-            )
-        )
-    
-    multi_agent = MultiAgent(
-        name=body.name,
-        model=body.model,
-        description=body.description,
-        instruction=body.instruction,
-        subagents=subagents
-    )
-
-    agent = multi_agent.create_ADK_agent()
-
-    serialized = pickle.dumps(agent)
-
-    import json
-    subagents_json = json.dumps([dict(sa) for sa in body.subagents]) # to store subagents info to the database
-
-    with sqlite3.connect('database.db') as connection:
-        cursor = connection.cursor()
-        cursor.execute("""
-        INSERT INTO multi_agents (agent_name, model, description, instruction, sub_agents, agent_instance) VALUES (?, ?, ?, ?, ?, ?);
-        """, (multi_agent.name, multi_agent.model, multi_agent.description, multi_agent.instruction, subagents_json, serialized))
-
-        connection.commit()
-
-    return {"STATUS":"Success"}
-
+        
 @app.get("/get-agents")
 def get_agents():
     with sqlite3.connect("database.db") as connection:
@@ -277,3 +236,122 @@ def get_agents():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app=app, port=8080)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# USE LATER FOR MEMORY FEATURE
+
+# At the top of your file
+# agents = {}  # {session_id: {"agent": LlmAgent, "runner": Runner}}
+
+# @app.post("/interact/{agent_type}/{agent_id}")
+# async def interact(body: AgentRequestBody, agent_type: str, agent_id: int):
+#     """ Handle interaction with a single or multi agent """
+#     with sqlite3.connect("database.db") as connection:
+#         cursor = connection.cursor()
+#         if agent_type == "single":
+#             cursor.execute("SELECT agent_name, model, description, instruction, tools FROM single_agents WHERE agent_id = ?", (agent_id,))
+#         else:
+#             cursor.execute("SELECT agent_name, model, description, instruction, sub_agents, tools FROM multi_agents WHERE agent_id = ?", (agent_id,))
+#         row = cursor.fetchone()
+
+#     name = row[0]
+#     model = row[1]
+#     description = row[2]
+#     instruction = row[3]
+#     if agent_type == "single":
+#         tools = json.loads(row[4])
+
+#         from google.adk.agents import LlmAgent
+#         from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseServerParams
+
+#         agent_key = f"{body.user_id}_{agent_id}"
+
+#         if agent_key not in agents:
+#             agent = LlmAgent(
+#                 name="_".join(name.title().split()),
+#                 model=model,
+#                 description=description,
+#                 instruction=instruction,
+#                 tools=[MCPToolset(connection_params=SseServerParams(url="http://127.0.0.1:8000/sse"),
+#                                    tool_filter=tools)]
+
+#             )
+#             runner = Runner(app_name="MyApp", agent=agent, session_service=session_service)
+#             session = await session_service.create_session(app_name="MyApp", user_id=body.user_id)
+
+#             agents[agent_key] = {"agent": agent, "runner": runner, "session": session}
+#         else:
+#             agent = agents[agent_key]["agent"]
+#             runner = agents[agent_key]["runner"]
+#             session = agents[agent_key]["session"]
+
+#     else:
+#         sub_agents = json.loads(row[4])
+#         tools = json.loads(row[5])
+
+#         from google.adk.agents import LlmAgent
+#         from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseServerParams
+
+#         agent_key = f"{body.user_id}_{agent_id}"
+
+#         if agent_key not in agents:
+#             sub_agents_list = []
+#             for sub in sub_agents:
+#                 sub_agents_list.append(
+#                     LlmAgent(
+#                         name="_".join(sub.get("name").title().split()),
+#                         model=sub.get("model"),
+#                         description=sub.get("description"),
+#                         instruction=sub.get("instruction"),
+#                         tools=[MCPToolset(connection_params=SseServerParams(url="http://127.0.0.1:8000/sse"),
+#                                          tool_filter=sub.get("tools"))]
+#                     )
+#                 )
+
+#             agent = LlmAgent(
+#                 name="_".join(name.title().split()),
+#                 model=model,
+#                 description=description,
+#                 instruction=instruction,
+#                 sub_agents=sub_agents_list,
+#                 tools=[MCPToolset(connection_params=SseServerParams(url="http://127.0.0.1:8000/sse"),
+#                                    tool_filter=tools)]
+
+#             )
+#             runner = Runner(app_name="MyApp", agent=agent, session_service=session_service)
+#             session = await session_service.create_session(app_name="MyApp", user_id=body.user_id)
+
+#             agents[agent_key] = {"agent": agent, "runner": runner, "session": session}
+#         else:
+#             agent = agents[agent_key]["agent"]
+#             runner = agents[agent_key]["runner"]
+#             session = agents[agent_key]["session"]
+
+#     # Prepare content and send
+#     content = Content(parts=[Part(text=body.message)], role="user")
+#     events = runner.run_async(user_id=body.user_id, session_id=session.id, new_message=content)
+
+#     response = ""
+#     async for event in events:
+#         if event.is_final_response() and event.content and event.content.parts:
+#             response = event.content.parts[0].text
+
+#     return JSONResponse(content={"response": response})

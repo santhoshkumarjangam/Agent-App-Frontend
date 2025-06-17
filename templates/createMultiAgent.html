@@ -1,269 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Create Multi-Agent</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='../static/createMultiAgent.css') }}" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Multi-Agent Team</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Your New Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='createMultiAgent.css') }}" />
 </head>
 <body>
-  <a href="{{ url_for('home') }}" class="back-btn">Back to Dashboard</a>
-  <div class="container">
-    <div class="form-card">
-      <h2><i class="fas fa-user-gear"></i>Create New Agent</h2>
-      <form action="{{ url_for('create_multi_agent') }}" method="POST" id="mainAgentForm">
+    <div class="page-container">
+        <header class="page-header">
+            <a href="{{ url_for('home') }}" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </a>
+        </header>
 
-        <!-- Main Agent Fields -->
-        <div class="form-group">
-          <label for="name">Agent Name</label>
-          <input type="text" id="name" name="name" required />
-        </div>
- 
-        <div class="form-group">
-          <label for="model">Model</label>
-          <select id="model" name="model" required>
-            <option value="">-- Select Model --</option>
-            <option value="gemini-2.0-flash-001">gemini-2.0-flash-001</option>
-          </select>
-        </div>
+        <form action="{{ url_for('create_multi_agent') }}" method="POST" id="mainAgentForm">
+            <!-- Main Orchestrator Agent Card -->
+            <div class="form-card">
+                <h2 class="form-title">
+                    Main Orchestrator Agent
+                </h2>
+                <p class="form-description">This agent will manage and delegate tasks to the sub-agents below.</p>
 
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea id="description" name="description" rows="3" required></textarea>
-        </div>
+                <div class="form-grid">
+                    <div class="form-group span-2"><label for="name">Name</label><input type="text" id="name" name="name" class="form-input" placeholder="e.g., Research & Development Team" required /></div>
+                    <div class="form-group span-2"><label for="model">Model</label><select id="model" name="model" class="form-input" required><option value="" disabled selected>-- Select a Model --</option><option value="gemini-2.0-flash-001">Gemini 2.0 Flash</option></select></div>
+                    <div class="form-group span-2"><label for="description">Description</label><textarea id="description" name="description" rows="3" class="form-input" placeholder="A short summary of the main agent" required></textarea></div>
+                    <div class="form-group span-2"><label for="instruction">Instructions</label><textarea id="instruction" name="instruction" rows="5" class="form-input" placeholder="Detailed instructions for the main agent on how to coordinate the team." required></textarea></div>
+                </div>
 
-        <div class="form-group">
-          <label for="instruction">Instruction</label>
-          <textarea id="instruction" name="instruction" rows="3" required></textarea>
-        </div>
+                <div class="form-group">
+                    <label>Tools</label>
+                    <small class="label-description">Select the tools this agent is authorized to use.</small>
+                    
+                    <div class="tool-section">
+                        <div class="tool-group">
+                            <div class="tool-group-label">Database Tools</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-list-db" name="tools" value="list_db_tables"><label for="tool-list-db">list_db_tables</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-get-schema" name="tools" value="get_table_schema"><label for="tool-get-schema">get_table_schema</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-query-db" name="tools" value="query_db_table"><label for="tool-query-db">query_db_table</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-insert-data" name="tools" value="insert_data"><label for="tool-insert-data">insert_data</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-delete-data" name="tools" value="delete_data"><label for="tool-delete-data">delete_data</label></div>
+                            </div>
+                        </div>
+                        
+                        <div class="tool-group">
+                            <div class="tool-group-label">Notepad</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-add-note" name="tools" value="add_note"><label for="tool-add-note">add_note</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-read-notes" name="tools" value="read_notes"><label for="tool-read-notes">read_notes</label></div>
+                            </div>
+                        </div>
 
-        <div class="form-group">
-            <label>Tools</label>
+                        <div class="tool-group">
+                            <div class="tool-group-label">File System</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-get-largest" name="tools" value="get_largest_file"><label for="tool-get-largest">get_largest_file</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-get-size" name="tools" value="get_total_size"><label for="tool-get-size">get_total_size</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-rename-file" name="tools" value="rename_file"><label for="tool-rename-file">rename_file</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-rename-prefix" name="tools" value="rename_files_with_prefix_to_name"><label for="tool-rename-prefix">rename_files_with_prefix</label></div>
+                            </div>
+                        </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">To-Do</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="main_tools" value="list_db_tables">
-                <label for="tool-todo">list_db_tables</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="main_tools" value="get_table_schema">
-                <label for="tool-todo">get_table_schema</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="main_tools" value="query_db_table">
-                <label for="tool-todo">query_db_table</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="main_tools" value="insert_data">
-                <label for="tool-todo">insert_data</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="main_tools" value="delete_data">
-                <label for="tool-todo">delete_data</label>
-              </div>
+                        <div class="tool-group">
+                            <div class="tool-group-label">PDF Tools</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-extract-page" name="tools" value="extract_page_text"><label for="tool-extract-page">extract_page_text</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-extract-range" name="tools" value="extract_page_range_text"><label for="tool-extract-range">extract_page_range_text</label></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">Notepad</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-notes" name="main_tools" value="add_note">
-                <label for="tool-notes">add_note</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-notes" name="main_tools" value="read_notes">
-                <label for="tool-notes">read_notes</label>
-              </div>
+            <!-- Sub-Agents Section -->
+            <div class="sub-agents-section">
+                <h3 class="sub-agents-header">
+                    <i class="fa-solid fa-users"></i>
+                    Sub-Agents
+                </h3>
+                <div id="subAgentContainer">
+                    <!-- Sub-agent forms will be injected here by JavaScript -->
+                </div>
+                <button type="button" class="add-subagent-btn" onclick="addSubAgent()">
+                    <i class="fa-solid fa-plus"></i>Add Sub-Agent
+                </button>
             </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">Directory Traversal</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-directory-traverse" name="main_tools" value="get_largest_file">
-                <label for="tool-directory-traverse">get_largest_file</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-directory-traverse" name="main_tools" value="get_total_size">
-                <label for="tool-directory-traverse">get_total_size</label>
-              </div>
-            </div>
-
-            <div class="tool-group">
-              <div class="tool-group-label">PDF Pages</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-pdf-page" name="main_tools" value="extract_page_text">
-                <label for="tool-pdf-page">extract_page_text</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-pdf-page" name="main_tools" value="extract_page_range_text">
-                <label for="tool-pdf-page">extract_page_range_text</label>
-              </div>
-            </div>
-
-            <div class="tool-group">
-              <div class="tool-group-label">File Rename</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-rename-file" name="main_tools" value="rename_file">
-                <label for="tool-rename-file">rename_file</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-rename-file" name="main_tools" value="rename_files_with_prefix_to_name">
-                <label for="tool-rename-file">rename_files_with_prefix_to_name</label>
-              </div>
-            </div>
-
-            <small>Select one or more tools.</small>
-          </div>
-
-        <!-- Sub-Agent Container -->
-        <div id="subAgentContainer"></div>
-
-        <!-- Add Sub-Agent Button -->
-        <button type="button" class="add-subagent-btn" onclick="addSubAgent()">
-          <i class="fas fa-user-plus"></i>Add Sub-Agent
-        </button>
-
-        <br>
-
-        <!-- Submit -->
-        <button type="submit" class="submit-btn">
-          <i class="fas fa-plus-circle"></i>Create Agent
-        </button>
-      </form>
+            <!-- Global Submit Button -->
+            <button type="submit" class="submit-btn">
+                <i class="fa-solid fa-circle-plus"></i>Create Multi-Agent Team
+            </button>
+        </form>
     </div>
-  </div>
 
-  <script>
+<script>
     let subAgentCounter = 0;
+    // This array will store indices of removed sub-agents, ready for reuse.
     const freeIndices = [];
 
-    function getNextIndex() {
-      return freeIndices.length > 0 ? freeIndices.shift() : subAgentCounter++;
+    /**
+     * Renumbers the visible titles of all sub-agents to be sequential.
+     * This improves the user experience by preventing gaps in numbering (e.g., "Sub-Agent 1", "Sub-Agent 3").
+     */
+    function renumberSubAgents() {
+        const allSubForms = document.querySelectorAll('#subAgentContainer .sub-agent-form');
+        allSubForms.forEach((form, visualIndex) => {
+            const header = form.querySelector('.sub-agent-header h4');
+            if (header) {
+                header.textContent = `Sub-Agent ${visualIndex + 1}`;
+            }
+        });
     }
 
+    /**
+     * Adds a new sub-agent form to the container.
+     * It will first try to use a recycled index from the freeIndices pool.
+     */
     function addSubAgent() {
-      const index = getNextIndex();
-      const container = document.getElementById("subAgentContainer");
+        let index;
 
-      const subForm = document.createElement("div");
-      subForm.classList.add("sub-agent-form");
-      subForm.setAttribute("data-index", index);
-      subForm.innerHTML = `
-        <hr />
-        <h3>Sub-Agent ${index+1}</h3>
-        <div class="form-group">
-          <label>Name</label>
-          <input type="text" name="sub_name[]" required />
-        </div>
+        // Check if there are any recycled indices available.
+        if (freeIndices.length > 0) {
+            // Take the smallest available index from the pool.
+            index = freeIndices.shift(); 
+        } else {
+            // If no recycled indices, use the main counter.
+            index = subAgentCounter++;
+        }
 
-        <div class="form-group">
-          <label>Model</label>
-          <select name="sub_model[]" required>
-            <option value="">-- Select Model --</option>
-            <option value="gemini-2.0-flash-001">gemini-2.0-flash-001</option>
-          </select>
-        </div>
+        const container = document.getElementById("subAgentContainer");
 
-        <div class="form-group">
-          <label>Description</label>
-          <textarea name="sub_description[]" rows="3" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Instructions</label>
-          <textarea name="sub_instructions[]" rows="3" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Tools</label>
-
-            <div class="tool-group">
-              <div class="tool-group-label">To-Do</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="list_db_tables">
-                <label for="tool-todo">list_db_tables</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="get_table_schema">
-                <label for="tool-todo">get_table_schema</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="query_db_table">
-                <label for="tool-todo">query_db_table</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="insert_data">
-                <label for="tool-todo">insert_data</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-todo" name="sub_tools[${index}][]" value="delete_data">
-                <label for="tool-todo">delete_data</label>
-              </div>
+        const subForm = document.createElement("div");
+        subForm.classList.add("sub-agent-form");
+        subForm.setAttribute("data-index", index); // Use the determined index.
+        
+        // The HTML template now correctly uses the unique 'index' for all IDs and names.
+        // This was the critical flaw in your provided code.
+        subForm.innerHTML = `
+            <div class="sub-agent-header">
+                <h4>Sub-Agent</h4> <!-- Title will be set by renumberSubAgents() -->
+                <button type="button" class="remove-btn" onclick="removeSubAgent(this)">
+                    <i class="fa-solid fa-xmark"></i> Remove
+                </button>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group span-2">
+                    <label for="sub_name_${index}">Name</label>
+                    <input type="text" id="sub_name_${index}" name="sub_name[]" class="form-input" required />
+                </div>
+                <div class="form-group span-2">
+                    <label for="sub_model_${index}">Model</label>
+                    <select id="sub_model_${index}" name="sub_model[]" class="form-input" required>
+                        <option value="" disabled selected>-- Select Model --</option>
+                        <option value="gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+                    </select>
+                </div>
+                <div class="form-group span-2">
+                    <label for="sub_description_${index}">Description</label>
+                    <textarea id="sub_description_${index}" name="sub_description[]" rows="2" class="form-input" required></textarea>
+                </div>
+                <div class="form-group span-2">
+                    <label for="sub_instructions_${index}">Instructions</label>
+                    <textarea id="sub_instructions_${index}" name="sub_instructions[]" rows="3" class="form-input" required></textarea>
+                </div>
             </div>
 
-            <div class="tool-group">
-              <div class="tool-group-label">Notepad</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-notes" name="sub_tools[${index}][]" value="add_note">
-                <label for="tool-notes">add_note</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-notes" name="sub_tools[${index}][]" value="read_notes">
-                <label for="tool-notes">read_notes</label>
-              </div>
+            <div class="form-group">
+                <label>Tools</label>
+                <div class="tool-section">
+                    <div class="tool-group"><div class="tool-group-label">Database Tools</div><div class="tool-grid">
+                        <div class="tool-checkbox"><input type="checkbox" id="sub_${index}_tool_list_db" name="sub_tools[${index}][]" value="list_db_tables"><label for="sub_${index}_tool_list_db">list_db_tables</label></div>
+                        <div class="tool-checkbox"><input type="checkbox" id="sub_${index}_tool_get_schema" name="sub_tools[${index}][]" value="get_table_schema"><label for="sub_${index}_tool_get_schema">get_table_schema</label></div>
+                        <div class="tool-checkbox"><input type="checkbox" id="sub_${index}_tool_query_db" name="sub_tools[${index}][]" value="query_db_table"><label for="sub_${index}_tool_query_db">query_db_table</label></div>
+                    </div></div>
+                    <div class="tool-group"><div class="tool-group-label">File System</div><div class="tool-grid">
+                        <div class="tool-checkbox"><input type="checkbox" id="sub_${index}_tool_get_largest" name="sub_tools[${index}][]" value="get_largest_file"><label for="sub_${index}_tool_get_largest">get_largest_file</label></div>
+                        <div class="tool-checkbox"><input type="checkbox" id="sub_${index}_tool_get_size" name="sub_tools[${index}][]" value="get_total_size"><label for="sub_${index}_tool_get_size">get_total_size</label></div>
+                    </div></div>
+                </div>
             </div>
+        `;
+        container.appendChild(subForm);
 
-            <div class="tool-group">
-              <div class="tool-group-label">Directory Traversal</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-directory-traverse" name="sub_tools[${index}][]" value="get_largest_file">
-                <label for="tool-directory-traverse">get_largest_file</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-directory-traverse" name="sub_tools[${index}][]" value="get_total_size">
-                <label for="tool-directory-traverse">get_total_size</label>
-              </div>
-            </div>
-
-            <div class="tool-group">
-              <div class="tool-group-label">PDF Pages</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-pdf-page" name="sub_tools[${index}][]" value="extract_page_text">
-                <label for="tool-pdf-page">extract_page_text</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-pdf-page" name="sub_tools[${index}][]" value="extract_page_range_text">
-                <label for="tool-pdf-page">extract_page_range_text</label>
-              </div>
-            </div>
-
-            <div class="tool-group">
-              <div class="tool-group-label">File Rename</div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-rename-file" name="sub_tools[${index}][]" value="rename_file">
-                <label for="tool-rename-file">rename_file</label>
-              </div>
-              <div class="tool-checkbox">
-                <input type="checkbox" id="tool-rename-file" name="sub_tools[${index}][]" value="rename_files_with_prefix_to_name">
-                <label for="tool-rename-file">rename_files_with_prefix_to_name</label>
-              </div>
-            </div>
-
-            <small>Select one or more tools.</small>
-          </div>
-
-        <button type="button" class="remove-btn" onclick="removeSubAgent(this, ${index})">Remove Sub-Agent</button>
-      `;
-      container.appendChild(subForm);
+        // After adding the new form, renumber all visible agents.
+        renumberSubAgents();
     }
 
-    function removeSubAgent(button, index) {
-      const form = button.closest('.sub-agent-form');
-      form.remove();
-      freeIndices.push(index); // Reuse this index when next one is created
-      freeIndices.sort((a, b) => a - b); // Keep the list in order
+    /**
+     * Removes a sub-agent form and adds its index back to the pool for recycling.
+     * @param {HTMLElement} button The remove button that was clicked.
+     */
+    function removeSubAgent(button) {
+        const form = button.closest('.sub-agent-form');
+        
+        // Get the index from the data attribute to be recycled.
+        const indexToRecycle = parseInt(form.dataset.index, 10);
+        
+        // Add the index to our pool of free indices.
+        freeIndices.push(indexToRecycle);
+        // Sort the pool to ensure we always use the lowest index first.
+        freeIndices.sort((a, b) => a - b); 
+
+        form.remove();
+
+        // After removing the form, renumber the remaining visible agents.
+        renumberSubAgents();
     }
-  </script>
+</script>
 </body>
 </html>

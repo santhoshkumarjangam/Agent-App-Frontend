@@ -1,56 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Agent Dashboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='../static/index.css') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Your Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
-  <body>
+<body>
 
-    <header class="dashboard-title">
-      <center><h1 style="color: black;">Agent Dashboard</h1></center>
-    </header>
-
-    <br><br>
-
-    <div class="action-bar-1">
-      <div class="dropdown-1">
-        <input type="checkbox" id="dropdownToggle" class="dropdown-toggle" />
-        <label for="dropdownToggle" class="create-btn-1">Create Agent ▼</label>
-        <div class="dropdown-content-1">
-          <a href="{{ url_for('create_single_agent') }}">Single Agent</a>
-          <a href="{{ url_for('create_multi_agent') }}">Multi-Agent</a>
-        </div>
-      </div>
-    </div>
-
-    <br>
-    <h2 class="section-title">Single Agents</h2>
-    <div class="agents-container">
-          {% for agent in single_agents %}
-            <div class="agent-card">
-              <h3 class="agent-name">{{ agent.name }}</h3>
-              <a href="{{ url_for('chat', agent_type='single', agent_id=agent.id) }}" class="use-btn" style="margin-left: 70px;">USE IT</a>
+    <div class="dashboard-container">
+        <!-- ===== Sidebar ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo-text">Agent Dashboard</h1>
             </div>
-          {% endfor %}
+
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('home') }}" class="nav-link active">
+                    <i class="fa-solid fa-table-columns"></i>
+                    <span>Dashboard</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="create-agent-dropdown">
+                    <input type="checkbox" id="dropdownToggle" class="dropdown-toggle" />
+                    <label for="dropdownToggle" class="create-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Create Agent</span>
+                        <i class="fa-solid fa-chevron-up chevron"></i>
+                    </label>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('create_single_agent') }}">
+                            <i class="fa-solid fa-user"></i> Single Agent
+                        </a>
+                        <a href="{{ url_for('create_multi_agent') }}">
+                            <i class="fa-solid fa-users"></i> Multi-Agent
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== Main Content ===== -->
+        <main class="main-content">
+            <header class="main-header">
+                <h2>Dashboard Overview</h2>
+                <p>Manage and interact with your AI agents.</p>
+            </header>
+
+            <section class="agent-section">
+                <h3 class="section-title">Single Agents</h3>
+                <div class="agents-container">
+                    {% if single_agents %}
+                        {% for agent in single_agents %}
+                        <div class="agent-card">
+                            <div class="card-icon single">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="agent-name">{{ agent.name }}</h4>
+                                <p class="agent-description">A specialized single agent.</p>
+                            </div>
+                            <a href="{{ url_for('chat', agent_type='single', agent_id=agent.id) }}" class="use-btn">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-agents-message">No single agents have been created yet.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="agent-section">
+                <h3 class="section-title">Multi-Agent Teams</h3>
+                <div class="agents-container">
+                     {% if multi_agents %}
+                        {% for agent in multi_agents %}
+                        <div class="agent-card">
+                            <div class="card-icon multi">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <h4 class="agent-name">{{ agent.name }}</h4>
+                                <p class="agent-description">A collaborative agent team.</p>
+                            </div>
+                            <a href="{{ url_for('chat', agent_type='multi', agent_id=agent.id) }}" class="use-btn">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-agents-message">No multi-agent teams have been created yet.</p>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
     </div>
 
-    <br>
-
-    <h2 class="section-title">Multi Agents</h2>
-    <div class="agents-container">
-      {% for agent in multi_agents %}
-        <div class="agent-card">
-          <h3 class="agent-name">{{ agent.name }}</h3>
-          <a href="{{ url_for('chat', agent_type='multi', agent_id=agent.id) }}" class="use-btn" style="margin-left: 70px;">USE IT</a>
-        </div>
-      {% endfor %}
-    </div>
-
-  </body>
-</html>  
-
-
+</body>
+</html>

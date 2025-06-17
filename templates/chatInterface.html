@@ -11,7 +11,33 @@
       <header><center><h1 style="color: black;">Chat</h1></center></header>
 
       <div class="chat-window" id="chat-window">
-        {{ response.strip() }}
+        {% if prompt and response %}
+                    <!-- User Message (Right) -->
+                    <div class="message-wrapper user-message">
+                        <div class="message-bubble">
+                            {{ prompt }}
+                        </div>
+                        <div class="message-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </div>
+
+                    <!-- Agent Message (Left) -->
+                    <div class="message-wrapper agent-message">
+                        <div class="message-avatar">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="message-bubble">
+                            {{ response.strip() }}
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- This block shows on the initial page load -->
+                    <div class="empty-chat-placeholder">
+                        <i class="fa-solid fa-comments"></i>
+                        <h2>Start the conversation</h2>
+                    </div>
+                {% endif %}
       </div>
 
       <form action="{{ url_for('chat', agent_type=agent_type, agent_id=agent_id) }}" class="chat-form" method="POST">

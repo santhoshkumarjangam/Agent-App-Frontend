@@ -87,9 +87,9 @@ def chat(agent_id, agent_type):
             json={"user_id":"new-user","message":str(prompt)}
         )
 
-        return render_template('chatInterface.html', response=response.json().get('response'), agent_id=agent_id, agent_type=agent_type)
+        return render_template('chatInterface.html', response=response.json().get('response'), prompt=prompt, agent_id=agent_id, agent_type=agent_type)
 
-    return render_template('chatInterface.html', response="", agent_id=agent_id, agent_type=agent_type)
+    return render_template('chatInterface.html', response="", prompt=None, agent_id=agent_id, agent_type=agent_type)
 
 if __name__ == "__main__":
     app.run(debug=True)
