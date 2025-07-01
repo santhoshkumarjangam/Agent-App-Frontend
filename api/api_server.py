@@ -103,66 +103,6 @@ async def interact(body: AgentRequestBody, agent_type: str, agent_id: int):
                 response_text = event.content.parts[0].text
 
         return JSONResponse(content={"response": response_text})
-    
-# @app.post("/interact/single/{agent_id}")
-# async def interact_single(body: AgentRequestBody, agent_id: int):
-#     with sqlite3.connect("database.db") as connection:
-#         cursor = connection.cursor()
-#         cursor.execute("SELECT agent_name, model, description, instruction, tools FROM single_agents WHERE agent_id = ?", (agent_id,))
-#         row = cursor.fetchone()
-
-#     name = row[0]
-#     model = row[1]
-#     description = row[2]
-#     instruction = row[3]
-#     tools = json.loads(row[4])
-
-#     from google.adk.agents import Agent
-#     from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseServerParams
-#     agent = Agent(
-#         name = "_".join(name.title().split()),
-#         model = model,
-#         description = description,
-#         instruction= instruction,
-#         tools=[MCPToolset(connection_params=SseServerParams(url="http://127.0.0.1:8000/sse"), tool_filter=tools)]
-#     )
-
-#     runner = Runner(app_name="MyApp", agent=agent, session_service=session_service)
-#     session = await session_service.create_session(app_name="MyApp", user_id=body.user_id)
-
-#     content = Content(parts=[Part(text=body.message)], role="user")
-#     events = runner.run_async(user_id=body.user_id, session_id=session.id, new_message=content)
-
-#     response_text = ""
-#     async for event in events:  
-#         if event.is_final_response() and event.content and event.content.parts:
-#             response_text = event.content.parts[0].text
-
-#     return JSONResponse(content={"response": response_text})
-
-# @app.post("/interact/multi/{agent_id}")
-# async def interact_multi(body: AgentRequestBody, agent_id: int):
-#     with sqlite3.connect("database.db") as connection:
-#         cursor = connection.cursor()
-#         cursor.execute("SELECT agent_instance FROM multi_agents WHERE agent_id = ?", (agent_id,))
-#         row = cursor.fetchone()
-
-#     agent = pickle.loads(row[0])
-#     runner = Runner(app_name="MyApp", agent=agent, session_service=session_service)
-#     session = await session_service.create_session(app_name="MyApp", user_id=body.user_id)
-
-#     content = Content(parts=[Part(text=body.message)], role="user")
-#     events = runner.run_async(user_id=body.user_id, session_id=session.id, new_message=content)
-
-#     final_response = ""
-
-#     async for event in events:
-#         if event.is_final_response() and event.content and event.content.parts:
-#             final_response += event.content.parts[0].text
-
-#     return JSONResponse(content={
-#         "response": final_response,
-#     })
 
 class CreateSingleAgentRequestBody(BaseModel):
     name : str
@@ -213,6 +153,21 @@ def create_multi_agent(body: CreateMultiAgentRequestBody):
         """,(body.name, body.model,  body.description, body.instruction, subagents_json, tools_json))
         connection.commit()
 
+@app.post("/delete/{agent_type}/{agent_id}")
+def delete_agent(agent_type: str, agent_id: int):
+    if agent_type == "single":
+        with sqlite3.connect('database.db') as connection:
+            cursor = connection.cursor()
+            cursor.execute("DELETE FROM single_agents WHERE agent_id=?",(agent_id,))
+            connection.commit()
+
+    elif agent_type == "multi":
+        with sqlite3.connect('database.db') as connection:
+            cursor = connection.cursor()
+            cursor.execute("DELETE FROM multi_agents WHERE agent_id=?",(agent_id,))
+            connection.commit()
+
+    return {"status": "success"}
         
 @app.get("/get-agents")
 def get_agents():

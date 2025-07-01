@@ -16,7 +16,7 @@
 
 /* ===== General & Reset Styles ===== */
 html {
-    font-size: 80%; /* Scales everything (text, spacing, rem units) down to 80% */
+    font-size: 90%; /* Scales everything (text, spacing, rem units) down to 80% */
 }
 
 * {

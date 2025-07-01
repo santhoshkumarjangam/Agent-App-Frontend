@@ -77,10 +77,11 @@ def create_multi_agent():
 
     return render_template("createMultiAgent.html")
 
-@app.route('/delete', methods=['POST'])
-def delete_agent():
-    # api call to delete agent
-    return {"successs": True}
+@app.route('/delete/<string:agent_type>/<int:agent_id>')
+def delete_agent(agent_type, agent_id):
+    response = requests.post(url=f"http://127.0.0.1:8080/delete/{agent_type}/{agent_id}")
+
+    return redirect(url_for("home"))
 
 @app.route('/chat/<string:agent_type>/<int:agent_id>', methods=["GET", "POST"])
 def chat(agent_id, agent_type):
