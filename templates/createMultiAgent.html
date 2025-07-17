@@ -182,6 +182,20 @@
             <div class="form-group">
                 <label>Tools</label>
                 <div class="tool-section">
+                    <div class="tool-group">
+                            <div class="tool-group-label">Notepad</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-add-note" name="tools" value="add_note"><label for="tool-add-note">add_note</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-read-notes" name="tools" value="read_notes"><label for="tool-read-notes">read_notes</label></div>
+                            </div>
+                    </div>
+                    <div class="tool-group">
+                            <div class="tool-group-label">PDF Tools</div>
+                            <div class="tool-grid">
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-extract-page" name="tools" value="extract_page_text"><label for="tool-extract-page">extract_page_text</label></div>
+                                <div class="tool-checkbox"><input type="checkbox" id="tool-extract-range" name="tools" value="extract_page_range_text"><label for="tool-extract-range">extract_page_range_text</label></div>
+                            </div>
+                    </div>
                     <div class="tool-group"><div class="tool-group-label">Database Tools</div><div class="tool-grid">
                         <div class="tool-checkbox"><input type="checkbox" id="sub_${index}_tool_list_db" name="sub_tools[${index}][]" value="list_db_tables"><label for="sub_${index}_tool_list_db">list_db_tables</label></div>
                         <div class="tool-checkbox"><input type="checkbox" id="sub_${index}_tool_get_schema" name="sub_tools[${index}][]" value="get_table_schema"><label for="sub_${index}_tool_get_schema">get_table_schema</label></div>
